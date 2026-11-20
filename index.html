@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>우리 방 분위기는?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap">
+<style>
+:root{--text-primary:#2b2328;--text-secondary:#6b6466;--text-danger:#A32D2D;--border:rgba(0,0,0,.12);--surface-2:#fff;--bg-neutral:#f1eeea;--font-sans:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+@media (prefers-color-scheme:dark){:root{--text-primary:#f5f1ee;--text-secondary:#b8b0ad;--text-danger:#F09595;--border:rgba(255,255,255,.16);--surface-2:#2c2728;--bg-neutral:#3a3436}body{background:#1f1b1c}}
+body{margin:0;background:#fffaf7}
+main{max-width:480px;margin:0 auto;padding:16px 16px 48px}
+.kr{font-family:'Gowun Dodum',var(--font-sans),sans-serif;padding:1rem 0;color:var(--text-primary)}
+.kr *{box-sizing:border-box}
+.kr .j{font-family:'Jua',var(--font-sans),sans-serif;font-weight:400}
+.kr button{font:inherit;font-size:15px;padding:11px 16px;border-radius:999px;border:0;cursor:pointer;color:#3a2e39;background:#FFE3EC}
+.kr button:active{transform:scale(.97)}
+.kr textarea{width:100%;font:inherit;font-size:14px;padding:10px;border-radius:16px;border:0.5px solid var(--border);background:var(--surface-2);color:var(--text-primary);resize:vertical}
+.card{background:var(--bg);color:var(--ink);border-radius:24px;padding:1.5rem 1.25rem 1.25rem;min-height:480px;position:relative;overflow:hidden;cursor:pointer;user-select:none;-webkit-user-select:none}
+.card .in{position:relative}
+.dot{position:absolute;border-radius:50%;background:var(--acc);opacity:.16}
+.box{background:rgba(255,255,255,.72);border-radius:16px;padding:.75rem .9rem;margin-bottom:8px}
+.pill{display:inline-block;background:rgba(255,255,255,.85);color:var(--ink);font-size:13px;padding:4px 11px;border-radius:999px;margin:0 6px 6px 0}
+.lab{font-size:13px;color:var(--sub);margin:0}
+.kick{font-size:13px;color:var(--acc);margin:0 0 4px}
+.ttl{font-size:25px;line-height:1.35;margin:0 0 16px}
+.big{font-size:28px;margin:0;line-height:1.25}
+.bub{background:#fff;color:#2b2328;border-radius:16px 16px 16px 4px;padding:7px 12px;font-size:14px;display:inline-block;max-width:90%;word-break:break-all}
+.who{font-size:11px;color:var(--sub);margin:8px 0 3px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.ic{width:56px;height:56px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--acc);margin-bottom:10px}
+.bars{display:flex;align-items:flex-end;gap:2px}
+.bars div{flex:1;background:var(--acc);border-radius:3px 3px 0 0}
+.kr .src{display:flex;flex-direction:column;align-items:flex-start;gap:2px;border-radius:20px;padding:16px;text-align:left}
+.kr .src .ti{font-size:26px;margin-bottom:6px}
+.step{display:flex;gap:10px;margin:0 0 10px;font-size:14px;line-height:1.55}
+.step b{flex:none;width:22px;height:22px;border-radius:50%;background:var(--acc);color:#fff;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.tip{background:rgba(255,255,255,.72);border-radius:14px;padding:10px 12px;font-size:13px;color:var(--sub);margin:4px 0 14px}
+.thr{display:block;width:100%;text-align:left;background:rgba(255,255,255,.8)!important;color:var(--ink)!important;border-radius:14px!important;margin-bottom:6px;padding:10px 14px!important}
+</style>
+</head>
+<body>
+<main>
+
+<div class="kr">
+<div id="kr-start">
+<div style="display:flex;gap:6px;margin-bottom:10px"><span style="width:14px;height:14px;border-radius:50%;background:#FFB8CF"></span><span style="width:14px;height:14px;border-radius:50%;background:#A8E2C6"></span><span style="width:14px;height:14px;border-radius:50%;background:#FFE08A"></span><span style="width:14px;height:14px;border-radius:50%;background:#B5CBFF"></span><span style="width:14px;height:14px;border-radius:50%;background:#D3C1FF"></span></div>
+<h1 class="j" style="font-size:32px;margin:0 0 6px">우리 방 분위기는?</h1>
+<p style="font-size:14px;color:var(--text-secondary);margin:0">대화를 내보내서 올리면 우리 방이 어떤 방인지 알려줄게요. 이 화면 안에서만 분석되고 어디에도 전송되지 않아요.</p>
+<p style="font-size:13px;color:var(--text-secondary);margin:18px 0 8px">어떤 대화를 분석할까요?</p>
+<div class="g2">
+<button id="kr-kakao" class="src" style="background:#FFF1C2;color:#4D3B0B"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-bottom:6px"><path d="M3 20l1.3-3.9A9 8 0 1 1 7.7 19L3 20"/></svg><span class="j" style="font-size:19px">카카오톡</span><span style="font-size:12px;color:#7F6A2E">단톡방 · 갠톡</span></button>
+<button id="kr-insta" class="src" style="background:#ECE3FF;color:#36245F"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-bottom:6px"><path d="M10 14L21 3M21 3l-6.5 18a.55.55 0 0 1-1 0L10 14l-7-3.5a.55.55 0 0 1 0-1L21 3"/></svg><span class="j" style="font-size:19px">인스타그램 DM</span><span style="font-size:12px;color:#685A8E">DM · 그룹 DM</span></button>
+</div>
+<button id="kr-sample" style="width:100%;margin-top:10px;background:var(--bg-neutral);color:var(--text-primary)">샘플 대화로 먼저 구경하기</button>
+</div>
+<div id="kr-guide"></div>
+<p id="kr-err" style="font-size:13px;color:var(--text-danger);margin:8px 0 0"></p>
+<div id="kr-view"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const ICO={"ti-message-circle": "<path d=\"M3 20l1.3-3.9A9 8 0 1 1 7.7 19L3 20\"/>", "ti-bolt": "<path d=\"M13 3v7h6l-8 11v-7H5l8-11\"/>", "ti-clock": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 7v5l3 3\"/>", "ti-mood-happy": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9 9h.01M15 9h.01M8 13a4 4 0 1 0 8 0H8\"/>", "ti-mood-smile": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9 10h.01M15 10h.01M9.5 15a3.5 3.5 0 0 0 5 0\"/>", "ti-moon": "<path d=\"M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z\"/>", "ti-photo": "<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"3\"/><path d=\"M15 8h.01M3 16l5-5c.9-.9 2.1-.9 3 0l5 5M14 14l1-1c.9-.9 2.1-.9 3 0l3 3\"/>", "ti-send": "<path d=\"M10 14L21 3M21 3l-6.5 18a.55.55 0 0 1-1 0L10 14l-7-3.5a.55.55 0 0 1 0-1L21 3\"/>"};
+const ico=(n,sz)=>`<svg width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px">${ICO[n]||''}</svg>`;
+
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=n=>Math.round(n).toLocaleString('ko-KR');
+const pc=(a,b)=>b?Math.round(a/b*100):0;
+const md2=d=>`${d.getMonth()+1}월 ${d.getDate()}일`;
+const fd=d=>`${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()}`;
+const hm=d=>{const h=d.getHours();return `${h<12?'오전':'오후'} ${h%12||12}:${String(d.getMinutes()).padStart(2,'0')}`};
+const hr=h=>`${h<5?'새벽':h<12?'오전':h<18?'오후':h<21?'저녁':'밤'} ${h%12||12}시`;
+const dkey=d=>`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+const WD='일월화수목금토';
+function to24(ap,h){h=+h;if(ap==='오후'&&h<12)h+=12;if(ap==='오전'&&h===12)h=0;return h}
+const SYS=/(님이 들어왔습니다|님이 나갔습니다|초대했습니다|내보냈습니다|채팅방 관리자)/;
+const MEDIA=/^(사진( \d+장)?|동영상|이모티콘|음성메시지|링크|파일: .*|삭제된 메시지입니다\.?)$/;
+const LAUGH=/[ㅋㅎ]{2,}/;
+const PROM=/(다음에|조만간|언제 ?한 ?번|나중에).{0,12}(보자|만나|먹자|가자|놀자|마시자)/;
+const STOP=new Set('그냥 진짜 근데 나도 너도 너무 이거 그거 저거 우리 그래서 그리고 아니 혹시 오늘 지금 이제 그럼 그래 내가 니가 네가 완전 약간 사진 이모티콘 동영상 삭제된 메시지입니다 있어 없어 했어 하는 하고 해서 같은 같아 이렇게 그렇게 많이 조금 다들 아직 계속 했는데 뭐야 그게 이게 나는 너는 우리도 맞아 아니야 괜찮아 그러면 하면 해야 되는 되나 하는데 있는 ㅋㅋ ㅎㅎ 싶다 먹고 먹자 보자 갈래 하자 가자 다음 같이 해도 될까 어디 언제 몇시 하고싶다 먹을래'.split(' '));
+function tok(t){return t.split(/[^가-힣a-zA-Z]+/).map(w=>w.length>2?w.replace(/(이랑|에서|한테|은|는|을|를|의|랑)$/,''):w).filter(w=>w.length>=2&&!STOP.has(w))}
+function parseCsv(text){
+const rows=[];let row=[],f='',q=false;
+for(let i=0;i<text.length;i++){const c=text[i];
+if(q){if(c==='"'){if(text[i+1]==='"'){f+='"';i++}else q=false}else f+=c}
+else if(c==='"')q=true;else if(c===','){row.push(f);f=''}
+else if(c==='\n'||c==='\r'){if(c==='\r'&&text[i+1]==='\n')i++;row.push(f);rows.push(row);row=[];f=''}
+else f+=c}
+if(f||row.length){row.push(f);rows.push(row)}
+const out=[];
+for(const r of rows){const m=r[0]&&r[0].match(/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})/);
+if(!m||r.length<3||SYS.test(r[2]))continue;
+out.push({n:r[1],d:new Date(+m[1],+m[2]-1,+m[3],+m[4],+m[5]),t:r.slice(2).join(',')})}
+return out}
+function parse(text){
+text=text.replace(/^﻿/,'');
+if(/^\s*Date,User,Message/.test(text)||/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},"/.test(text))return parseCsv(text);
+const out=[];let day=null;
+const rDay=/^-*\s*(\d{4})년 (\d{1,2})월 (\d{1,2})일 \S+요일\s*-*$/;
+const rPC=/^\[(.+?)\] \[(오전|오후) (\d{1,2}):(\d{2})\] (.*)$/;
+const rMob=/^(\d{4})(?:년 |\. )(\d{1,2})(?:월 |\. )(\d{1,2})(?:일|\.) (?:(오전|오후) )?(\d{1,2}):(\d{2}), (.+?) : (.*)$/;
+const rAny=/^\d{4}(년 |\. |-)\d/;
+for(const line of text.split(/\r?\n/)){
+let m;
+if(m=line.match(rDay)){day=[+m[1],+m[2]-1,+m[3]];continue}
+if(day&&(m=line.match(rPC))){out.push({n:m[1],d:new Date(day[0],day[1],day[2],to24(m[2],m[3]),+m[4]),t:m[5]});continue}
+if(m=line.match(rMob)){out.push({n:m[7],d:new Date(+m[1],+m[2]-1,+m[3],to24(m[4],m[5]),+m[6]),t:m[8]});continue}
+if(rAny.test(line)||SYS.test(line))continue;
+if(out.length&&line.trim())out[out.length-1].t+='\n'+line;
+}
+return out;
+}
+const med=a=>{const s=[...a].sort((x,y)=>x-y);return s.length?s[Math.floor(s.length/2)]:0};
+const best=(a,f)=>a.length?a.reduce((b,p)=>f(p)>f(b)?p:b):null;
+const topN=(o,n)=>Object.entries(o).sort((a,b)=>b[1]-a[1]).slice(0,n);
+const inc=(o,k,v=1)=>{o[k]=(o[k]||0)+v};
+const cut=(s,n=42)=>{s=s.replace(/\s*\n\s*/g,' ');return s.length>n?s.slice(0,n)+'…':s};
+const uniq=a=>{const s=new Set();return a.filter(m=>{const k=m.t.trim();if(s.has(k))return false;s.add(k);return true})};
+const bub=(m,tag)=>`<div><p class="who">${esc(m.n)} · ${hm(m.d)}${tag?' · '+esc(tag):''}</p><span class="bub">${esc(cut(m.t))}</span></div>`;
+function analyze(msgs){
+msgs.sort((a,b)=>a.d-b.d);
+const P={},hours=Array(24).fill(0),wds=Array(7).fill(0),months={},days={},words={},monthW={};
+const g=n=>P[n]||(P[n]={n,c:0,media:0,laugh:0,night:0,start:0,rep:[],got:0,prom:0,w:{},tk:0,fun:[],opens:[],nights:[],proms:[],lt:{},maxL:0,repTo:{},mdays:{},dd:{},chars:0,txt:0,lb:{},la:{}});
+let allTok=0,laughN=0,nightN=0,mediaN=0,promN=0,chars=0,txtN=0;
+msgs.forEach((m,i)=>{
+const p=g(m.n);p.c++;const h=m.d.getHours();hours[h]++;wds[m.d.getDay()]++;
+const mo=m.d.getFullYear()*12+m.d.getMonth();inc(months,mo);
+const tx=m.t.trim();m.md=MEDIA.test(tx);const lm=tx.match(/[ㅋㅎ]{2,}/g);m.lg=!!lm;
+const k=dkey(m.d);inc(days,k);inc(p.dd,k);
+if(m.md){p.media++;mediaN++;inc(p.mdays,k)}
+else{const tk=tok(tx);tk.forEach(w=>{inc(words,w);inc(p.w,w);monthW[mo]=monthW[mo]||{};inc(monthW[mo],w)});p.tk+=tk.length;allTok+=tk.length;
+if(!m.lg||tx.replace(/[ㅋㅎ\s]/g,'').length>3){p.chars+=tx.length;p.txt++;chars+=tx.length;txtN++}}
+if(h<5){p.night++;nightN++;if(!m.md&&tx.replace(/[ㅋㅎ\s]/g,'').length>1)p.nights.push(m)}
+if(m.lg){p.laugh++;laughN++;lm.forEach(l=>{p.maxL=Math.max(p.maxL,l.length);inc(p.lt,l.length>10?l.slice(0,10)+'…':l)})}
+if(PROM.test(tx)){p.prom++;promN++;p.proms.push(m)}
+const pv=msgs[i-1];const gap=pv?(m.d-pv.d)/6e4:1e9;
+if(gap>180){p.start++;if(!m.md)p.opens.push(m)}
+if(pv&&pv.n!==m.n&&gap<=30){p.rep.push(gap);(p.repTo[pv.n]=p.repTo[pv.n]||[]).push(gap)}
+});
+const pure=m=>m.lg&&m.t.replace(/[ㅋㅎ\s]/g,'').length<2;
+msgs.forEach((x,j)=>{if(!x.lg)return;for(let i=j-1;i>=Math.max(0,j-6);i--){const m=msgs[i];if(x.d-m.d>5*6e4)break;if(m.md||pure(m))continue;if(m.n===x.n)break;(m.ls=m.ls||new Set()).add(x.n);break}});
+msgs.forEach(m=>{m.lr=m.ls?m.ls.size:0;if(m.lr){const p=P[m.n];p.got+=m.lr;p.fun.push(m);m.ls.forEach(n=>{inc(p.lb,n);inc(P[n].la,m.n)})}});
+const people=Object.values(P).sort((a,b)=>b.c-a.c);
+const total=msgs.length;
+people.forEach(p=>{p.sig=Object.entries(p.w).filter(([w,c])=>c>=3).map(([w,c])=>[w,c,(c/p.tk)/(words[w]/allTok)*Math.sqrt(c)]).sort((a,b)=>b[2]-a[2]).slice(0,5).map(x=>x[0])});
+let el=people.filter(p=>p.c>=Math.max(10,total*0.01));if(!el.length)el=people;
+const hk=topN(days,1)[0][0];
+const hd=msgs.filter(m=>dkey(m.d)===hk);
+const hw={},hh=Array(24).fill(0),hsp={};
+hd.forEach(m=>{hh[m.d.getHours()]++;inc(hsp,m.n);if(!m.md)tok(m.t).forEach(w=>inc(hw,w))});
+const topics=Object.entries(hw).filter(([w,c])=>c>=3).map(([w,c])=>[w,c,c*c/words[w]]).sort((a,b)=>b[2]-a[2]).slice(0,6).map(([w,c])=>({w,c,share:pc(c,words[w])}));
+const ses=[];hd.forEach((m,i)=>{if(!i||m.d-hd[i-1].d>30*6e4)ses.push([]);ses[ses.length-1].push(m)});
+const tl=ses.map(s=>{const sw={};s.forEach(m=>{if(!m.md)tok(m.t).forEach(w=>inc(sw,w))});
+const tw=Object.entries(sw).filter(([w,c])=>c>=2).sort((a,b)=>b[1]*b[1]/words[b[0]]-a[1]*a[1]/words[a[0]])[0];
+const cand=s.filter(m=>!m.md&&!(m.lg&&m.t.replace(/[ㅋㅎ\s]/g,'').length<2));
+const ex=best(cand,m=>(m.lr||0)*100+Math.min(m.t.length,30));
+return{s:s[0].d,e:s[s.length-1].d,c:s.length,w:tw?tw[0]:null,ex}}).sort((a,b)=>b.c-a.c).slice(0,5).sort((a,b)=>a.s-b.s);
+const scene=best(hd.filter(m=>m.lr),m=>m.lr)||best(msgs.filter(m=>m.lr),m=>m.lr);
+let sceneMsgs=[];if(scene){const i=msgs.indexOf(scene);sceneMsgs=msgs.slice(Math.max(0,i-2),i+5)}
+const H={d:hd[0].d,c:hd.length,hh,sp:topN(hsp,3),topics,tl,scene,sceneMsgs,laugh:hd.filter(m=>m.lg).length,media:hd.filter(m=>m.md).length,first:hd[0],last:hd[hd.length-1]};
+const mTop=Object.keys(months).map(Number).map(mo=>{const ws=monthW[mo]||{};const tw=Object.entries(ws).filter(([w,c])=>c>=3).sort((a,b)=>b[1]*b[1]/words[b[0]]-a[1]*a[1]/words[a[0]])[0];return{mo,c:months[mo],w:tw?tw[0]:null}}).sort((a,b)=>a.mo-b.mo);
+return{msgs,people,el,total,hours,wds,mTop,days,words,H,laughN,nightN,mediaN,promN,avgLen:txtN?chars/txtN:0};
+}
+const PAL=[
+{bg:'#FFE3EC',ink:'#4F2236',sub:'#8A5468',acc:'#E2588A'},
+{bg:'#DDF3E8',ink:'#1F4536',sub:'#4F7A66',acc:'#2E9E6E'},
+{bg:'#FFF1C2',ink:'#4D3B0B',sub:'#7F6A2E',acc:'#D08A00'},
+{bg:'#DDE8FF',ink:'#1F3260',sub:'#50638F',acc:'#4A72D6'},
+{bg:'#ECE3FF',ink:'#36245F',sub:'#685A8E',acc:'#8460D6'},
+{bg:'#FFE6D6',ink:'#56301C',sub:'#8A5E48',acc:'#E06A35'}];
+function build(A){
+const S=[];let ci=0;const add=h=>S.push({c:ci++%PAL.length,h});
+const T=A.total,first=A.msgs[0].d,last=A.msgs[T-1].d;
+const span=Math.round((last-first)/864e5)+1;
+const pk=A.hours.indexOf(Math.max(...A.hours));
+const adj=pk<5?'잠 못 드는':pk<12?'부지런한':pk<18?'한낮의':'밤이 깊을수록 신나는';
+const tr=[['웃음 공장',A.laughN/T/.15,`메시지 ${pc(A.laughN,T)}%에 ㅋㅋ가 들어 있어요`],['새벽 수다방',A.nightN/T/.08,`새벽 0~5시에만 ${fmt(A.nightN)}개를 보냈어요`],['사진 앨범',A.mediaN/T/.15,`사진·영상·이모티콘이 ${fmt(A.mediaN)}개나 오갔어요`],['토론 클럽',A.avgLen/25,`메시지 하나에 평균 ${Math.round(A.avgLen)}자, 할 말이 많은 방이에요`]];
+let mt=best(tr,t=>t[1]);if(mt[1]<1)mt=['수다방',1,`하루 평균 ${fmt(T/span)}개씩 쌓였어요`];
+add(`<p class="kick">우리 방 분위기는?</p><p class="j" style="font-size:20px;margin:6px 0 0">${adj}</p><p class="j" style="font-size:40px;line-height:1.15;margin:0 0 10px;color:var(--acc)">${mt[0]}</p><p style="font-size:15px;margin:0 0 18px">${mt[2]}</p><div class="g2" style="margin-bottom:12px"><div class="box"><p class="lab">총 메시지</p><p class="big j">${fmt(T)}</p></div><div class="box"><p class="lab">참여자</p><p class="big j">${A.people.length}명</p></div><div class="box"><p class="lab">함께한 날</p><p class="big j">${fmt(span)}일</p></div><div class="box"><p class="lab">하루 평균</p><p class="big j">${fmt(T/span)}개</p></div></div><span class="pill">#${fd(first)}~${fd(last)}</span><span class="pill">#${hr(pk)}_최고조</span><span class="pill">#ㅋㅋ지분_${pc(A.laughN,T)}%</span>`);
+const t5=A.people.slice(0,5),mx=t5[0].c;
+add(`<p class="kick">수다 순위</p><p class="ttl j">이 방의 목소리 지분</p>`+t5.map((p,i)=>`<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:15px;margin-bottom:4px"><span class="j">${i+1}. ${esc(p.n)}</span><span class="lab">${fmt(p.c)}개 · ${pc(p.c,T)}%</span></div><div style="height:12px;border-radius:6px;background:rgba(255,255,255,.7)"><div style="height:12px;border-radius:6px;background:var(--acc);opacity:${i?.55:1};width:${Math.max(3,Math.round(p.c/mx*100))}%"></div></div>${p.sig.length?`<p class="lab" style="margin-top:4px;font-size:12px">자주 쓰는 말: ${p.sig.slice(0,3).map(esc).join(', ')}</p>`:''}</div>`).join(''));
+const hmx=Math.max(...A.hours),wmx=Math.max(...A.wds),pw=A.wds.indexOf(wmx);
+const quiet=A.hours.indexOf(Math.min(...A.hours));
+add(`<p class="kick">시간대</p><p class="ttl j">이 방은 ${hr(pk)}에<br>가장 시끄러워요</p><div class="box"><div class="bars" style="height:110px">${A.hours.map((v,h)=>`<div style="height:${Math.max(2,Math.round(v/hmx*110))}px;opacity:${h===pk?1:.45}"></div>`).join('')}</div><div class="lab" style="display:flex;justify-content:space-between;font-size:11px;margin-top:4px"><span>0시</span><span>6시</span><span>12시</span><span>18시</span><span>23시</span></div></div><div class="box"><p class="lab" style="margin-bottom:6px">요일별로 보면 <b style="color:var(--ink)">${WD[pw]}요일</b>이 제일 활발해요</p><div class="bars" style="height:60px">${A.wds.map((v,i)=>`<div style="height:${Math.max(2,Math.round(v/wmx*60))}px;opacity:${i===pw?1:.45}"></div>`).join('')}</div><div class="lab" style="display:flex;justify-content:space-around;font-size:11px;margin-top:4px">${[...WD].map(d=>`<span>${d}</span>`).join('')}</div></div><p class="lab">가장 조용한 시간은 ${hr(quiet)}, 새벽 0~5시 메시지는 ${fmt(A.nightN)}개예요</p>`);
+const H=A.H,avg=T/Object.keys(A.days).length,hhm=Math.max(...H.hh),hpk=H.hh.indexOf(hhm),star=H.sp[0];
+add(`<p class="kick">가장 뜨거웠던 날 1/3</p><p class="ttl j">${H.d.getFullYear()}년 ${md2(H.d)} ${WD[H.d.getDay()]}요일,<br>기억나요?</p><div class="g2"><div class="box"><p class="lab">그날의 메시지</p><p class="big j">${fmt(H.c)}개</p><p class="lab">평소의 ${(H.c/avg).toFixed(1)}배</p></div><div class="box"><p class="lab">대화한 시간</p><p class="big j">${Math.max(1,Math.round((H.last.d-H.first.d)/36e5))}시간</p><p class="lab">${hm(H.first.d)} ~ ${hm(H.last.d)}</p></div></div><div class="box"><p class="lab" style="margin-bottom:6px">시간별로 보면 ${hr(hpk)}에 최고조</p><div class="bars" style="height:70px">${H.hh.map((v,h)=>`<div style="height:${v?Math.max(3,Math.round(v/hhm*70)):1}px;opacity:${h===hpk?1:.45}"></div>`).join('')}</div></div><div class="box"><p class="lab">그날의 주인공</p><p class="j" style="font-size:22px;margin:2px 0">${esc(star[0])} <span class="lab" style="font-family:inherit">${fmt(star[1])}개 · ${pc(star[1],H.c)}%</span></p><p class="lab">${H.sp.slice(1).map(([n,c])=>`${esc(n)} ${fmt(c)}개`).join(' · ')}${H.laugh?` · ㅋㅋ ${fmt(H.laugh)}번`:''}${H.media?` · 사진/이모티콘 ${fmt(H.media)}개`:''}</p></div>`);
+const tp=H.topics;
+add(`<p class="kick">가장 뜨거웠던 날 2/3</p><p class="ttl j">그날 무슨 일이<br>있었냐면요</p><div class="box"><p style="font-size:15px;margin:0 0 8px">${tp.length?`${tp.slice(0,3).map(t=>`'${esc(t.w)}'`).join(', ')} 이야기로 하루 종일 시끌벅적했어요`:'특별한 주제 없이 수다가 폭발한 날이에요'}</p>${tp.map(t=>`<span class="pill">${esc(t.w)} ${t.c}번${t.share>=30?` · 올해의 ${t.share}%`:''}</span>`).join('')}</div><p class="lab" style="margin:10px 0 4px">그날의 흐름</p>${H.tl.map(s=>`<div style="display:flex;gap:10px;margin-bottom:8px"><div style="min-width:62px;font-size:12px;color:var(--acc);padding-top:2px">${hm(s.s)}</div><div style="flex:1;min-width:0"><p style="font-size:14px;margin:0">${s.w?`'${esc(s.w)}' 얘기`:'수다 타임'} <span class="lab">· ${s.c}개</span></p>${s.ex?`<span class="bub" style="font-size:13px;margin-top:3px">${esc(s.ex.n)}: ${esc(cut(s.ex.t,30))}</span>`:''}</div></div>`).join('')}`);
+if(H.scene)add(`<p class="kick">가장 뜨거웠던 날 3/3</p><p class="ttl j">${dkey(H.scene.d)===dkey(H.d)?'그날의 명장면':'올해의 명장면'}</p><p class="lab" style="margin-bottom:6px">이 말에 ${H.scene.lr}명이 동시에 빵 터졌어요</p>${H.sceneMsgs.map(m=>m===H.scene?`<div><p class="who">${esc(m.n)} · ${hm(m.d)}</p><span class="bub" style="background:var(--acc);color:#fff">${esc(cut(m.t))}</span></div>`:bub(m)).join('')}`);
+const mm=Math.max(...A.mTop.map(x=>x.c)),hotM=best(A.mTop,x=>x.c);
+add(`<p class="kick">올해의 흐름</p><p class="ttl j">${hotM.mo%12+1}월이 제일 뜨거웠어요</p><div class="box"><div class="bars" style="height:100px;gap:4px">${A.mTop.map(x=>`<div style="height:${Math.max(3,Math.round(x.c/mm*100))}px;opacity:${x===hotM?1:.45}"></div>`).join('')}</div><div class="lab" style="display:flex;gap:4px;font-size:10px;margin-top:4px">${A.mTop.map(x=>`<span style="flex:1;text-align:center">${x.mo%12+1}</span>`).join('')}</div></div><p class="lab" style="margin:10px 0 6px">달마다 유독 많이 나온 말</p>${A.mTop.filter(x=>x.w).map(x=>`<span class="pill">${x.mo%12+1}월 · ${esc(x.w)}</span>`).join('')}`);
+add(`<p class="kick">우리 방의 단어</p><p class="ttl j">올해 이 방을 채운 말들</p><div>${topN(A.words,14).map(([w,c],i)=>`<span class="pill" style="font-size:${i<3?20:i<7?15:13}px;${i<3?'background:#fff;color:var(--acc)':''}">${esc(w)} ${fmt(c)}</span>`).join('')}</div>`);
+const el=A.el,C=[],used=new Set();
+const pk3=(arr,f)=>{const c=[...arr].sort((a,b)=>f(b)-f(a)).slice(0,3);return c.find(p=>!used.has(p.n))||c[0]||null};
+const ch=(title,ic,p,stat,body)=>{if(p){used.add(p.n);C.push({title,ic,p,stat,body:body(p)})}};
+ch('수다왕','ti-message-circle',best(el,p=>p.c),p=>`메시지 ${fmt(p.c)}개 · 방 지분 ${pc(p.c,T)}%`,p=>{const td=topN(p.dd,1)[0];const dd=A.msgs.find(m=>dkey(m.d)===td[0]).d;return `<div class="g2"><div class="box"><p class="lab">제일 말 많던 날</p><p class="j" style="font-size:20px;margin:0">${md2(dd)}</p><p class="lab">혼자 ${fmt(td[1])}개</p></div><div class="box"><p class="lab">평균 메시지 길이</p><p class="j" style="font-size:20px;margin:0">${Math.round(p.txt?p.chars/p.txt:0)}자</p></div></div>${p.sig.length?`<div class="box"><p class="lab" style="margin-bottom:6px">이 사람의 말버릇</p>${p.sig.map(w=>`<span class="pill">${esc(w)} ${p.w[w]}</span>`).join('')}</div>`:''}`});
+ch('대화 시동꾼','ti-bolt',pk3(el,p=>p.start),p=>`조용한 방을 ${p.start}번 깨웠어요`,p=>{const oc={},oh=Array(24).fill(0);p.opens.forEach(m=>{inc(oc,m.t.trim());oh[m.d.getHours()]++});const tops=topN(oc,3);return `<p class="lab" style="margin-bottom:2px">주로 이렇게 말을 걸어요</p>${tops.map(([t,c])=>`<div style="margin:6px 0"><span class="bub">${esc(cut(t))}</span>${c>1?` <span class="lab">×${c}</span>`:''}</div>`).join('')}<div class="box" style="margin-top:12px"><p class="lab">주로 방을 깨우는 시간</p><p class="j" style="font-size:20px;margin:0">${hr(oh.indexOf(Math.max(...oh)))}</p></div>`});
+ch('칼답러','ti-clock',pk3(el.filter(p=>p.rep.length>=5),p=>-med(p.rep)),p=>{const m=Math.round(med(p.rep));return m<1?'1분도 안 돼서 답장해요':`보통 ${m}분 안에 답장해요`},p=>{const pt=best(Object.entries(p.repTo).filter(([n,a])=>a.length>=3),([n,a])=>-med(a));return `<div class="g2"><div class="box"><p class="lab">1분 안에 답한 비율</p><p class="big j">${pc(p.rep.filter(x=>x<=1).length,p.rep.length)}%</p></div><div class="box"><p class="lab">답장한 횟수</p><p class="big j">${fmt(p.rep.length)}번</p></div></div>${pt?`<div class="box"><p class="lab">특히 이 친구한테 빨라요</p><p class="j" style="font-size:22px;margin:2px 0">${esc(pt[0])}</p><p class="lab">${pt[1].length}번 답장, 보통 ${Math.round(med(pt[1]))}분</p></div>`:''}`});
+ch('웃음 제조기','ti-mood-happy',pk3(el.filter(p=>p.got),p=>p.got),p=>`친구들을 ${p.got}번 웃겼어요`,p=>{const f=uniq([...p.fun].sort((a,b)=>b.lr-a.lr)).slice(0,3);const fan=topN(p.lb,1)[0];return `<p class="lab" style="margin-bottom:2px">이 말들로 웃겼어요</p>${f.map(m=>bub(m,`${m.lr}명 빵 터짐`)).join('')}${fan?`<div class="box" style="margin-top:12px"><p class="lab">제일 잘 웃어주는 친구</p><p class="j" style="font-size:22px;margin:2px 0">${esc(fan[0])} <span class="lab" style="font-family:inherit">${fan[1]}번 웃음</span></p></div>`:''}`});
+ch('리액션 자판기','ti-mood-smile',pk3(el.filter(p=>p.laugh),p=>p.laugh/p.c),p=>`메시지의 ${pc(p.laugh,p.c)}%가 웃음이에요`,p=>{const fav=topN(p.lt,1)[0];const at=topN(p.la,1)[0];return `<div class="box"><p class="lab">최애 웃음</p><p class="j" style="font-size:30px;margin:0;color:var(--acc);word-break:break-all">${esc(fav[0])}</p><p class="lab">${fav[1]}번 사용 · 최장 기록 ${p.maxL}글자 연속</p></div><div class="g2"><div class="box"><p class="lab">웃어준 횟수</p><p class="big j">${fmt(p.laugh)}번</p></div>${at?`<div class="box"><p class="lab">제일 많이 웃은 상대</p><p class="j" style="font-size:20px;margin:0">${esc(at[0])}</p><p class="lab">${at[1]}번</p></div>`:''}</div>`});
+ch('새벽 철학자','ti-moon',pk3(el.filter(p=>p.night>=3),p=>p.night/p.c),p=>`새벽에 ${p.night}개를 보냈어요`,p=>{const ls=best(p.nights.length?p.nights:[{d:new Date(0)}],m=>{const h=m.d.getHours();return h*60+m.d.getMinutes()});const ns=uniq([...p.nights].sort((a,b)=>b.t.length-a.t.length)).slice(0,3).sort((a,b)=>a.d-b.d);return `<p class="lab" style="margin-bottom:2px">새벽에 남긴 말</p>${ns.map(m=>`<div><p class="who">${md2(m.d)} ${hm(m.d)}</p><span class="bub">${esc(cut(m.t))}</span></div>`).join('')}${p.nights.length?`<div class="box" style="margin-top:12px"><p class="lab">가장 늦게까지 깨어 있던 시간</p><p class="j" style="font-size:22px;margin:0">${hm(ls.d)}</p></div>`:''}`});
+ch('사진 담당','ti-photo',pk3(el.filter(p=>p.media),p=>p.media),p=>`사진·영상·이모티콘 ${fmt(p.media)}개`,p=>{const td=topN(p.mdays,1)[0];const dd=A.msgs.find(m=>dkey(m.d)===td[0]).d;return `<div class="g2"><div class="box"><p class="lab">방 전체 사진 중</p><p class="big j">${pc(p.media,A.mediaN)}%</p></div><div class="box"><p class="lab">내 메시지 중</p><p class="big j">${pc(p.media,p.c)}%</p></div></div><div class="box"><p class="lab">사진 폭탄 투하한 날</p><p class="j" style="font-size:22px;margin:0">${md2(dd)}</p><p class="lab">하루에 ${td[1]}개</p></div>`});
+C.forEach((c,i)=>add(`<p class="kick">캐릭터 카드 ${i+1}/${C.length}</p><div class="ic">${ico(c.ic,28)}</div><p class="j" style="font-size:16px;margin:0;color:var(--sub)">${c.title}</p><p class="j" style="font-size:34px;margin:0 0 2px;line-height:1.2">${esc(c.p.n)}</p><p style="font-size:15px;margin:0 0 14px">${c.stat(c.p)}</p>${c.body}`));
+add(`<p class="kick">한눈에 보기</p><p class="ttl j">이 방의 사람들</p><div class="g2">${C.map(c=>`<div class="box" style="margin:0"><p class="lab"><span style="margin-right:4px;color:var(--acc)">${ico(c.ic,15)}</span>${c.title}</p><p class="j" style="font-size:19px;margin:2px 0 0">${esc(c.p.n)}</p></div>`).join('')}</div><p class="lab" style="margin-top:14px;text-align:center">내년에도 이 방이 시끄럽길</p>`);
+return S;
+}
+let S=[],cur=0;
+function show(){
+const n=S.length,s=S[cur],P0=PAL[s.c];
+$('kr-view').innerHTML=`<div style="display:flex;gap:3px;margin-bottom:10px">${S.map((_,i)=>`<div style="flex:1;height:4px;border-radius:2px;background:${i<=cur?PAL[S[cur].c].acc:'var(--border)'}"></div>`).join('')}</div><div class="card" id="kr-card" style="--bg:${P0.bg};--ink:${P0.ink};--sub:${P0.sub};--acc:${P0.acc}"><div class="dot" style="width:150px;height:150px;right:-50px;top:-50px"></div><div class="dot" style="width:90px;height:90px;left:-30px;bottom:-30px"></div><div class="dot" style="width:28px;height:28px;right:24px;bottom:40px"></div><div class="in">${s.h}</div></div><div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px"><button id="kr-pv" style="background:var(--bg-neutral);color:var(--text-primary)">이전</button><span style="font-size:13px;color:var(--text-secondary)">${cur+1} / ${n}</span><button id="kr-nx" style="background:${P0.bg};color:${P0.ink}">${cur===n-1?'처음으로':'다음'}</button></div><div style="text-align:center;margin-top:10px"><button id="kr-rs" style="background:transparent;color:var(--text-secondary);font-size:13px">다른 대화 분석하기</button></div>`;
+const mv=d=>{cur=(cur+d+n)%n;show()};
+$('kr-pv').onclick=()=>{if(cur>0)mv(-1)};
+$('kr-nx').onclick=()=>mv(1);
+$('kr-card').onclick=e=>{const r=e.currentTarget.getBoundingClientRect();if(e.clientX-r.left<r.width/3){if(cur>0)mv(-1)}else mv(1)};
+$('kr-rs').onclick=home;
+}
+function go(msgs){
+if(msgs.length<20){$('kr-err').textContent='메시지를 20개 이상 읽어야 분석할 수 있어요. 내보낸 파일이 맞는지 확인해 주세요.';return}
+$('kr-err').textContent='';
+S=build(analyze(msgs));cur=0;$('kr-start').style.display='none';$('kr-guide').innerHTML='';show();
+}
+function run(text){try{go(parse(text))}catch(e){$('kr-err').textContent='분석 중 오류가 났어요: '+e.message}}
+const fix=s=>{if(!s||/[^\u0000-ÿ]/.test(s))return s||'';try{return new TextDecoder('utf-8',{fatal:true}).decode(Uint8Array.from(s,c=>c.charCodeAt(0)))}catch(e){return s}};
+const ISYS=/(Liked a message|Reacted .* to your message|메시지에 공감|님이 공감|메시지 전송을 취소|unsent a message|started a video chat|영상 채팅|음성 통화|missed (a|your) (video|audio) call|changed the group|님이 그룹|named the group|added .* to the group|left the group)/i;
+function fromInsta(js){
+const out=[];
+js.forEach(j=>(j.messages||[]).forEach(m=>{
+let t=m.content!=null?fix(m.content):'';
+if(m.photos)t='사진';else if(m.videos)t='동영상';else if(m.audio_files)t='음성메시지';else if(m.sticker||m.gifs)t='이모티콘';else if(m.files)t='파일: 첨부';else if(m.share&&(!t||/sent an attachment|첨부 파일을 보냈습니다/.test(t)))t='링크';
+if(!t||ISYS.test(t)||!m.timestamp_ms)return;
+out.push({n:fix(m.sender_name||'알 수 없음'),d:new Date(m.timestamp_ms),t})}));
+return out}
+let threads={};
+function pickThread(){
+const list=Object.values(threads).sort((a,b)=>b.c-a.c);
+if(list.length===1){const m=fromInsta(list[0].js);if(m.length<20){$('kr-err').textContent=`이 대화는 메시지가 ${m.length}개뿐이라 분석하기 어려워요.`;return}go(m);return}
+const P0=PAL[4],q=($('kr-q')||{}).value||'';
+const rows=list.filter(t=>!q||t.title.includes(q)).slice(0,40);
+$('kr-guide').innerHTML=`<div class="card" style="--bg:${P0.bg};--ink:${P0.ink};--sub:${P0.sub};--acc:${P0.acc};cursor:default;min-height:0"><p class="kick">대화방 고르기</p><p class="ttl j">어떤 대화를 볼까요?</p><input id="kr-q" placeholder="이름으로 찾기" value="${esc(q)}" style="width:100%;margin-bottom:10px;border-radius:12px;border:0;padding:9px 12px;font:inherit;font-size:14px;background:#fff;color:#2b2328">${rows.map(t=>`<button class="thr" data-k="${esc(t.k)}"><span class="j" style="font-size:16px">${esc(t.title)}</span><br><span style="font-size:12px;color:var(--sub)">${t.people}명 · 메시지 약 ${fmt(t.c)}개</span></button>`).join('')||'<p class="lab">찾는 대화가 없어요</p>'}</div><div style="text-align:center;margin-top:10px"><button id="kr-back2" style="background:transparent;color:var(--text-secondary);font-size:13px">처음으로</button></div>`;
+$('kr-q').oninput=()=>{const v=$('kr-q').value;pickThread();const e=$('kr-q');e.focus();e.setSelectionRange(v.length,v.length)};
+document.querySelectorAll('.thr').forEach(b=>b.onclick=()=>{const m=fromInsta(threads[b.dataset.k].js);if(m.length<20){$('kr-err').textContent=`이 대화는 메시지가 ${m.length}개뿐이라 분석하기 어려워요. 다른 대화를 골라 주세요.`;return}go(m)});
+$('kr-back2').onclick=home;
+}
+const say=(m,bad)=>{const e=$('kr-st');if(e){e.style.display=m?'block':'none';e.style.color=bad?'#A32D2D':'var(--ink)';e.innerHTML=m}else $('kr-err').textContent=m.replace(/<[^>]+>/g,' ')};
+const readAs=(f,how)=>new Promise((ok,no)=>{const fr=new FileReader();fr.onload=()=>ok(fr.result);fr.onerror=()=>no(fr.error||new Error('파일을 읽지 못했어요'));how==='buf'?fr.readAsArrayBuffer(f):fr.readAsText(f,'utf-8')});
+const mb=n=>(n/1048576).toFixed(n>1048576*10?0:1)+'MB';
+function needZip(){return window.JSZip?Promise.resolve():new Promise((ok,no)=>{const u=['https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js','https://unpkg.com/jszip@3.10.1/dist/jszip.min.js'];let i=0;const tryi=()=>{if(i>=u.length)return no(new Error('zip 도구를 불러오지 못했어요'));const sc=document.createElement('script');sc.src=u[i++];sc.onload=()=>window.JSZip?ok():tryi();sc.onerror=tryi;document.head.appendChild(sc)};tryi()})}
+async function insta(files){
+$('kr-err').textContent='';threads={};let html=0,tried=[];
+const addJ=(j,path)=>{if(!j||!Array.isArray(j.messages))return;const k=j.thread_path||path.replace(/\/[^/]*$/,'')||'x';const t=threads[k]||(threads[k]={k,js:[],c:0,title:fix(j.title)||(j.participants||[]).map(p=>fix(p.name)).join(', ')||'대화',people:(j.participants||[]).length});t.js.push(j);t.c+=j.messages.length};
+try{
+say(`파일 ${files.length}개를 받았어요: ${files.map(f=>esc(f.name)+' ('+mb(f.size)+')').join(', ')}`);
+for(const f of files){
+const head=new Uint8Array(await readAs(f.slice(0,4),'buf'));const isZip=head[0]===0x50&&head[1]===0x4B;
+if(isZip){
+say(`zip 여는 중... (${esc(f.name)}, ${mb(f.size)})${f.size>300*1048576?'<br>파일이 커서 시간이 걸리거나 휴대폰에서 멈출 수 있어요':''}`);
+await needZip();
+const z=await JSZip.loadAsync(await readAs(f,'buf'));
+const all=Object.keys(z.files).filter(p=>!z.files[p].dir);
+const ps=all.filter(p=>/(^|\/)messages\/(inbox|message_requests|archived_threads|e2ee_cutover)\/[^/]+\/message_\d+\.json$/i.test(p)||/(^|\/)message_\d+\.json$/i.test(p));
+html+=all.filter(p=>/message_\d+\.html$/i.test(p)).length;
+tried=tried.concat(all);
+say(`zip 안 파일 ${fmt(all.length)}개 중 대화 파일 ${ps.length}개를 찾았어요. 읽는 중...`);
+let i=0;for(const p of ps){addJ(JSON.parse(await z.file(p).async('string')),p);if(++i%20===0)say(`대화 파일 읽는 중... ${i}/${ps.length}`)}
+}else{say(`${esc(f.name||'파일')} 읽는 중...`);const tx=(await readAs(f,'txt')).replace(/^\uFEFF/,'').trim();
+if(tx[0]==='{'){let j;try{j=JSON.parse(tx)}catch(e){throw new Error('JSON 파일이 잘렸거나 깨진 것 같아요')}if(Array.isArray(j.messages))addJ(j,f.name||'x');else tried.push((f.name||'파일')+' (메시지가 없는 json)')}
+else if(tx[0]==='<')html++;
+else tried.push(f.name||'파일')}
+}
+if(!Object.keys(threads).length){
+const hint=tried.filter(p=>/messag|inbox/i.test(p)).slice(0,4);const smp=(hint.length?hint:tried.slice(0,4)).map(p=>`<br>· ${esc(p)}`).join('');
+say(html?'HTML 형식으로 받은 파일이에요. 내보내기 설정에서 형식을 JSON으로 바꿔 다시 요청해 주세요.':`대화 파일을 찾지 못했어요. 내보낼 때 정보에서 메시지를 골랐는지, zip이 여러 개라면 다른 zip에 있는지 확인해 주세요.${smp?'<br><br>파일 안에 이런 게 있었어요:'+smp:''}`,true);return}
+say('');$('kr-st').style.display='none';
+pickThread();
+}catch(e){say('파일을 읽다가 오류가 났어요: '+esc(e.message||String(e)),true)}
+}
+const st=(i,h)=>`<div class="step"><span class="n">${i}</span><div>${h}</div></div>`;
+function guide(src){
+$('kr-err').textContent='';$('kr-start').style.display='none';
+const k=src==='kakao',P0=PAL[k?2:4];
+$('kr-guide').innerHTML=`<div class="card" style="--bg:${P0.bg};--ink:${P0.ink};--sub:${P0.sub};--acc:${P0.acc};cursor:default;min-height:0"><div class="dot" style="width:140px;height:140px;right:-50px;top:-50px"></div><div class="in"><p class="kick">${k?'카카오톡':'인스타그램 DM'}</p><p class="ttl j">먼저 대화를<br>내보내 주세요</p>${k?`<p class="j" style="font-size:16px;margin:0 0 8px">휴대폰 (아이폰 · 안드로이드)</p>${st(1,'분석할 채팅방에 들어가요')}${st(2,'오른쪽 위 <em>≡ 메뉴</em>를 누르고, 아래쪽 <em>톱니바퀴(설정)</em>로 가요')}${st(3,'<em>대화 내용 내보내기 → 텍스트만 보내기</em>를 골라요')}${st(4,'파일로 저장해요. 아이폰은 <em>파일에 저장</em>을 고르면 돼요')}<p class="j" style="font-size:16px;margin:14px 0 8px">PC · 맥</p>${st(1,'채팅방 <em>≡ 메뉴 → 대화 내용 → 대화 내보내기</em>')}${st(2,'저장된 .txt 파일을 올려요 (맥은 .csv)')}<div class="tip">메뉴 이름은 카톡 버전마다 조금 다를 수 있어요. 사진은 빼고 텍스트만 내보내야 빨라요.</div>`:`${st(1,'인스타 앱에서 프로필 → 오른쪽 위 <em>≡</em> → <em>계정 센터</em>로 가요')}${st(2,'<em>내 정보 및 권한 → 내 정보 내보내기 → 내보내기 만들기</em>')}${st(3,'인스타 프로필을 고르고 <em>기기로 내보내기</em>를 눌러요')}${st(4,'세부 설정을 바꿔요<br>· 정보: <em>메시지</em>만 체크<br>· 기간: <em>전체 기간</em><br>· 형식: <em>JSON</em> (꼭!)<br>· 미디어 화질: <em>낮음</em>')}${st(5,'<em>내보내기 시작</em>을 누르고, 준비됐다는 메일이 오면 zip 파일을 받아요')}${st(6,'zip 파일을 그대로 아래에 올리면 대화방을 고를 수 있어요')}<div class="tip">형식을 HTML로 받으면 분석이 안 돼요. 계정 센터가 "Meta 계정"으로 보일 수도 있는데 안의 메뉴는 같아요.</div>`}<div class="box" style="margin-top:6px"><p class="lab" style="margin-bottom:8px">${k?'내보낸 파일 올리기 (.txt / .csv)':'zip 파일 또는 message_1.json 하나 올리기'}</p><input type="file" id="kr-file" ${k?'accept=".txt,.csv"':''} style="width:100%;font-size:13px"><p id="kr-st" style="display:none;font-size:13px;margin:10px 0 0;line-height:1.5;word-break:break-all"></p></div>${k?`<p class="lab" style="margin:10px 0 6px">또는 대화 내용을 직접 붙여넣기</p><textarea id="kr-text" rows="3" placeholder="2026년 3월 5일 오후 3:24, 민지 : 오늘 뭐함" style="border:0;background:#fff;color:#2b2328"></textarea><button id="kr-go" style="width:100%;margin-top:8px;background:var(--acc);color:#fff">붙여넣은 대화 분석하기</button>`:''}</div></div><div style="text-align:center;margin-top:10px"><button id="kr-back" style="background:transparent;color:var(--text-secondary);font-size:13px">처음으로</button></div>`;
+$('kr-back').onclick=home;
+window.addEventListener('unhandledrejection',e=>say('오류가 났어요: '+esc((e.reason&&e.reason.message)||String(e.reason)),true));
+$('kr-file').addEventListener('change',e=>{const fs=[...e.target.files];if(!fs.length)return;
+if(k){const fr=new FileReader();fr.onload=()=>run(fr.result);fr.onerror=()=>{$('kr-err').textContent='파일을 읽지 못했어요. 내용을 붙여넣어 주세요.'};fr.readAsText(fs[0],'utf-8')}else insta(fs)});
+if(k){$('kr-go').onclick=()=>{const v=$('kr-text').value.trim();if(!v){$('kr-err').textContent='붙여넣은 내용이 없어요.';return}run(v)};$('kr-text').oninput=()=>{$('kr-err').textContent=''}}
+}
+function home(){$('kr-view').innerHTML='';$('kr-guide').innerHTML='';$('kr-err').textContent='';$('kr-start').style.display=''}
+$('kr-kakao').addEventListener('click',()=>guide('kakao'));
+$('kr-insta').addEventListener('click',()=>guide('insta'));
+function makeSample(){
+let s=7;const r=()=>{s=(s*16807)%2147483647;return(s-1)/2147483646};
+const pick=a=>a[Math.floor(r()*a.length)];
+const N=['민지','준호','서연','도윤','하은'],W=[5,3,3,2,2],WT=W.reduce((a,b)=>a+b);
+const wp=()=>{let x=r()*WT,i=0;while(i<4&&(x-=W[i])>0)i++;return N[i]};
+const OP={민지:['얘들아','오늘 뭐함','심심한 사람'],준호:['나 방금 대박 사건','ㅎㅇ'],서연:['점심 뭐 먹지','이거 봤어?'],도윤:['자는 사람?','잠 안 오는 사람'],하은:['오늘 하늘 봐','사진']};
+const pool=['배고프다','과제 언제까지야','시험 망함','이모티콘','헐 진짜?','넷플릭스 신작 재밌더라','주말에 뭐해','알바 끝남','졸려','치킨 먹고 싶다','과제 다했어?','교수님 출석 부름','마라탕 먹고 싶다','중간고사 범위 어디까지야','떡볶이 먹으러 가자'];
+const promP=['다음에 밥 먹자','조만간 한번 보자','나중에 술 마시자','시험 끝나면 놀자'];
+const fun=['나 지하철 반대로 탐','알람 7개 맞췄는데 다 끄고 잠','교수님이 내 이름 틀리게 부름','라면 물 두 배 넣음','과제 냈는데 빈 파일이었음','버스 놓쳐서 뛰었는데 그 버스 아니었음'];
+const nightP=['잠이 안 온다','인생 뭘까','갑자기 배고프다','내일 1교시인데 망함','다들 자?','별 보러 가고 싶다'];
+const trip=['부산 여행 가자','기차표 예매했어','숙소 어디로 해','해운대 갈래 광안리 갈래','여행 일정 짜자','기차 몇시야','숙소 결제함','돼지국밥 먹자','회 먹으러 가자','광안리 야경 보자','부산 진짜 기대된다','숙소 체크인 몇시','해운대 바다 보자'];
+const tripFun=['기차표 3시인줄 알았는데 1시였음','숙소 사진이랑 실물 너무 다름','나 수영복 없음','부산 사투리 연습 중임'];
+const hrs=[10,12,13,15,18,19,20,21,21,22,22,23,23,0,1,2];
+const L=[];
+for(let d=new Date(2026,0,1);d<new Date(2026,10,16);d.setDate(d.getDate()+1)){
+const burst=d.getMonth()===6&&d.getDate()===14;
+const sess=burst?8:Math.floor(r()*3);
+for(let q=0;q<sess;q++){
+let t=new Date(d.getFullYear(),d.getMonth(),d.getDate(),burst?9+q*2:pick(hrs),Math.floor(r()*60));
+const cnt=burst?40:5+Math.floor(r()*30);let fl=0,fa=null;
+for(let k=0;k<cnt;k++){
+t=new Date(t.getTime()+Math.floor(r()*4)*6e4);
+const h=t.getHours();let n=wp();if(h<5&&r()<.5)n='도윤';let x;
+if(k===0)x=pick(OP[n]);
+else if(fl>0&&n!==fa&&r()<.8){x=n==='서연'?'ㅋㅋㅋㅋㅋㅋ 미쳤다':pick(['ㅋㅋㅋ','ㅋㅋㅋㅋ','ㅋㅋㅋㅋㅋㅋㅋㅋ','ㅎㅎㅎ']);fl--}
+else if(h<5&&n==='도윤'&&r()<.6)x=pick(nightP);
+else if(n==='준호'&&r()<.3){x=pick(burst?tripFun:fun);fl=3;fa=n}
+else if(n==='하은'&&r()<.35)x=pick(['사진','사진 3장','동영상']);
+else if(r()<.08)x='ㅋㅋ';
+else x=pick(burst?trip:pool);
+L.push(`${t.getFullYear()}년 ${t.getMonth()+1}월 ${t.getDate()}일 ${h<12?'오전':'오후'} ${h%12||12}:${String(t.getMinutes()).padStart(2,'0')}, ${n} : ${x}`);
+}}}
+return L.join('\n');
+}
+$('kr-sample').addEventListener('click',()=>{$('kr-err').textContent='';try{go(parse(makeSample()))}catch(e){$('kr-err').textContent='분석 중 오류가 났어요: '+e.message}});
+})();
+</script>
+
+</main>
+</body>
+</html>
