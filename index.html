@@ -242,29 +242,21 @@ function download(blob,name){const u=URL.createObjectURL(blob);const a=document.
 async function buildPdf(){if(PDF)return PDF;const keep=cur,imgs=[];
 try{for(let i=0;i<S.length;i++){cur=i;show();toast(`PDF 만드는 중... ${i+1}/${S.length}`);await new Promise(r=>setTimeout(r,60));imgs.push(await snapJpg())}}finally{cur=keep;show()}
 PDF=makePdf(imgs);return PDF}
-function sharePdf(){const title='우리 방 분위기는?',file=new File([PDF],'room-mood.pdf',{type:'application/pdf'});
-if(navigator.canShare&&navigator.canShare({files:[file]})){navigator.share({files:[file],title,text:`우리 방 분위기 결산이야! 너네 방도 해봐 ${SITE()}`}).catch(e=>{if(e.name!=='AbortError')toast('공유하지 못했어요 ('+(e.message||e.name)+')')});return}
-if(navigator.share){navigator.share({title,text:'우리 단톡방 분위기 분석해봤어 ㅋㅋ 너네 방도 해봐',url:SITE()}).catch(e=>{if(e.name!=='AbortError')toast('공유하지 못했어요 ('+(e.message||e.name)+')')});toast('이 브라우저는 PDF 파일 공유가 안 돼서 사이트 링크로 공유해요');return}
-toast('이 브라우저는 공유 기능이 없어요. PDF로 저장한 뒤 카톡에서 파일로 보내 주세요')}
-async function pdfGo(share){if(busy)return;
-if(share&&PDF){sharePdf();return}
+async function pdfGo(){if(busy)return;
 if(!window.htmlToImage){toast('PDF 도구를 불러오지 못했어요. 새로고침 후 다시 해 주세요');return}busy=true;
 try{await buildPdf()}catch(e){busy=false;const why=(e&&e.message)||'알 수 없는 오류';
-if(share)toast('PDF를 만들지 못했어요 ('+why+'). PDF로 저장 버튼으로 인쇄 창에서 저장해 주세요');
-else{toast('바로 PDF를 만들 수 없어서 인쇄 창을 열게요. 프린터를 "PDF로 저장"으로 고르세요');printPdf()}return}
-busy=false;show();
-if(share)toast('PDF 준비 완료! "지금 공유하기"를 한 번 더 눌러 주세요');
-else{download(PDF,'room-mood.pdf');toast('PDF를 저장했어요. 다운로드 폴더를 확인해 주세요')}}
+toast('바로 PDF를 만들 수 없어서 인쇄 창을 열게요. 프린터를 "PDF로 저장"으로 고르세요');printPdf();return}
+busy=false;download(PDF,'room-mood.pdf');toast('PDF를 저장했어요. 다운로드 폴더를 확인해 주세요')}
 
 function show(){
 const n=S.length,s=S[cur],P0=PAL[s.c];
-$('kr-view').innerHTML=`<div style="display:flex;gap:3px;margin-bottom:10px">${S.map((_,i)=>`<div style="flex:1;height:4px;border-radius:2px;background:${i<=cur?PAL[S[cur].c].acc:'var(--border)'}"></div>`).join('')}</div><div class="card" id="kr-card" style="--bg:${P0.bg};--ink:${P0.ink};--sub:${P0.sub};--acc:${P0.acc}"><div class="dot" style="width:150px;height:150px;right:-50px;top:-50px"></div><div class="dot" style="width:90px;height:90px;left:-30px;bottom:-30px"></div><div class="dot" style="width:28px;height:28px;right:24px;bottom:40px"></div><div class="in">${s.h}</div></div><div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px"><button id="kr-pv" style="background:var(--bg-neutral);color:var(--text-primary)">이전</button><span style="font-size:13px;color:var(--text-secondary)">${cur+1} / ${n}</span><button id="kr-nx" style="background:${P0.bg};color:${P0.ink}">${cur===n-1?'처음으로':'다음'}</button></div>${cur===n-1?`<div class="share"><button id="kr-save" style="background:${P0.bg};color:${P0.ink}">PDF로 저장</button><button id="kr-share" style="background:${P0.acc};color:#fff">${PDF?'지금 공유하기':'PDF 공유'}</button></div><p style="font-size:12px;color:var(--text-secondary);text-align:center;margin:8px 0 0">카드 ${n}장을 PDF 한 파일로 만들어요${INAPP?'<br>카톡·네이버 앱 안에서는 저장이 안 될 수 있어요. 크롬이나 삼성 인터넷에서 열어 주세요':''}</p>`:''}<div style="text-align:center;margin-top:10px"><button id="kr-rs" style="background:transparent;color:var(--text-secondary);font-size:13px">다른 대화 분석하기</button></div>`;
+$('kr-view').innerHTML=`<div style="display:flex;gap:3px;margin-bottom:10px">${S.map((_,i)=>`<div style="flex:1;height:4px;border-radius:2px;background:${i<=cur?PAL[S[cur].c].acc:'var(--border)'}"></div>`).join('')}</div><div class="card" id="kr-card" style="--bg:${P0.bg};--ink:${P0.ink};--sub:${P0.sub};--acc:${P0.acc}"><div class="dot" style="width:150px;height:150px;right:-50px;top:-50px"></div><div class="dot" style="width:90px;height:90px;left:-30px;bottom:-30px"></div><div class="dot" style="width:28px;height:28px;right:24px;bottom:40px"></div><div class="in">${s.h}</div></div><div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px"><button id="kr-pv" style="background:var(--bg-neutral);color:var(--text-primary)">이전</button><span style="font-size:13px;color:var(--text-secondary)">${cur+1} / ${n}</span><button id="kr-nx" style="background:${P0.bg};color:${P0.ink}">${cur===n-1?'처음으로':'다음'}</button></div>${cur===n-1?`<div class="share"><button id="kr-save" style="background:${P0.acc};color:#fff">PDF로 저장</button></div><p style="font-size:12px;color:var(--text-secondary);text-align:center;margin:8px 0 0">카드 ${n}장을 PDF 한 파일로 만들어요${INAPP?'<br>카톡·네이버 앱 안에서는 저장이 안 될 수 있어요. 크롬이나 삼성 인터넷에서 열어 주세요':''}</p>`:''}<div style="text-align:center;margin-top:10px"><button id="kr-rs" style="background:transparent;color:var(--text-secondary);font-size:13px">다른 대화 분석하기</button></div>`;
 const mv=d=>{cur=(cur+d+n)%n;show()};
 $('kr-pv').onclick=()=>{if(cur>0)mv(-1)};
 $('kr-nx').onclick=()=>mv(1);
 $('kr-card').onclick=e=>{const r=e.currentTarget.getBoundingClientRect();if(e.clientX-r.left<r.width/3){if(cur>0)mv(-1)}else mv(1)};
 $('kr-rs').onclick=home;
-if(cur===n-1){$('kr-save').onclick=()=>pdfGo(false);$('kr-share').onclick=()=>pdfGo(true)}
+if(cur===n-1){$('kr-save').onclick=()=>pdfGo(false)}
 }
 function go(msgs){
 if(msgs.length<20){$('kr-err').textContent='메시지를 20개 이상 읽어야 분석할 수 있어요. 내보낸 파일이 맞는지 확인해 주세요.';return}
