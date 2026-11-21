@@ -34,8 +34,14 @@ main{max-width:480px;margin:0 auto;padding:16px 16px 48px}
 .kr .src{display:flex;flex-direction:column;align-items:flex-start;gap:2px;border-radius:20px;padding:16px;text-align:left}
 .kr .src .ti{font-size:26px;margin-bottom:6px}
 .step{display:flex;gap:10px;margin:0 0 10px;font-size:14px;line-height:1.55}
-.step b{flex:none;width:22px;height:22px;border-radius:50%;background:var(--acc);color:#fff;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.step em{font-style:normal;font-weight:500}
+.step .n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--acc);color:#fff;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;margin-top:1px}
 .tip{background:rgba(255,255,255,.72);border-radius:14px;padding:10px 12px;font-size:13px;color:var(--sub);margin:4px 0 14px}
+.share{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px}
+.kr .share button{font-size:13px;padding:9px 14px;background:var(--bg-neutral);color:var(--text-primary)}
+.kr .share button.on{background:#2b2328;color:#fff}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#2b2328;color:#fff;font-size:13px;padding:10px 16px;border-radius:999px;z-index:9;max-width:90%;text-align:center}
+.wm{margin:16px 0 0;font-size:11px;color:var(--sub);text-align:center}
 .thr{display:block;width:100%;text-align:left;background:rgba(255,255,255,.8)!important;color:var(--ink)!important;border-radius:14px!important;margin-bottom:6px;padding:10px 14px!important}
 </style>
 </head>
@@ -59,6 +65,7 @@ main{max-width:480px;margin:0 auto;padding:16px 16px 48px}
 <div id="kr-view"></div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.13/dist/html-to-image.js"></script>
 <script>
 (function(){
 const $=id=>document.getElementById(id);
@@ -177,7 +184,7 @@ const span=Math.round((last-first)/864e5)+1;
 const pk=A.hours.indexOf(Math.max(...A.hours));
 const adj=pk<5?'잠 못 드는':pk<12?'부지런한':pk<18?'한낮의':'밤이 깊을수록 신나는';
 const tr=[['웃음 공장',A.laughN/T/.15,`메시지 ${pc(A.laughN,T)}%에 ㅋㅋ가 들어 있어요`],['새벽 수다방',A.nightN/T/.08,`새벽 0~5시에만 ${fmt(A.nightN)}개를 보냈어요`],['사진 앨범',A.mediaN/T/.15,`사진·영상·이모티콘이 ${fmt(A.mediaN)}개나 오갔어요`],['토론 클럽',A.avgLen/25,`메시지 하나에 평균 ${Math.round(A.avgLen)}자, 할 말이 많은 방이에요`]];
-let mt=best(tr,t=>t[1]);if(mt[1]<1)mt=['수다방',1,`하루 평균 ${fmt(T/span)}개씩 쌓였어요`];
+let mt=best(tr,t=>t[1]);if(mt[1]<1)mt=['수다방',1,`하루 평균 ${fmt(T/span)}개씩 쌓였어요`];S.mood=adj+' '+mt[0];
 add(`<p class="kick">우리 방 분위기는?</p><p class="j" style="font-size:20px;margin:6px 0 0">${adj}</p><p class="j" style="font-size:40px;line-height:1.15;margin:0 0 10px;color:var(--acc)">${mt[0]}</p><p style="font-size:15px;margin:0 0 18px">${mt[2]}</p><div class="g2" style="margin-bottom:12px"><div class="box"><p class="lab">총 메시지</p><p class="big j">${fmt(T)}</p></div><div class="box"><p class="lab">참여자</p><p class="big j">${A.people.length}명</p></div><div class="box"><p class="lab">함께한 날</p><p class="big j">${fmt(span)}일</p></div><div class="box"><p class="lab">하루 평균</p><p class="big j">${fmt(T/span)}개</p></div></div><span class="pill">#${fd(first)}~${fd(last)}</span><span class="pill">#${hr(pk)}_최고조</span><span class="pill">#ㅋㅋ지분_${pc(A.laughN,T)}%</span>`);
 const t5=A.people.slice(0,5),mx=t5[0].c;
 add(`<p class="kick">수다 순위</p><p class="ttl j">이 방의 목소리 지분</p>`+t5.map((p,i)=>`<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:15px;margin-bottom:4px"><span class="j">${i+1}. ${esc(p.n)}</span><span class="lab">${fmt(p.c)}개 · ${pc(p.c,T)}%</span></div><div style="height:12px;border-radius:6px;background:rgba(255,255,255,.7)"><div style="height:12px;border-radius:6px;background:var(--acc);opacity:${i?.55:1};width:${Math.max(3,Math.round(p.c/mx*100))}%"></div></div>${p.sig.length?`<p class="lab" style="margin-top:4px;font-size:12px">자주 쓰는 말: ${p.sig.slice(0,3).map(esc).join(', ')}</p>`:''}</div>`).join(''));
@@ -206,20 +213,41 @@ C.forEach((c,i)=>add(`<p class="kick">캐릭터 카드 ${i+1}/${C.length}</p><di
 add(`<p class="kick">한눈에 보기</p><p class="ttl j">이 방의 사람들</p><div class="g2">${C.map(c=>`<div class="box" style="margin:0"><p class="lab"><span style="margin-right:4px;color:var(--acc)">${ico(c.ic,15)}</span>${c.title}</p><p class="j" style="font-size:19px;margin:2px 0 0">${esc(c.p.n)}</p></div>`).join('')}</div><p class="lab" style="margin-top:14px;text-align:center">내년에도 이 방이 시끄럽길</p>`);
 return S;
 }
-let S=[],cur=0;
+let S=[],cur=0,RAW=[],anon=false,busy=false;
+function rebuild(){let src;if(anon){const cnt={};RAW.forEach(m=>inc(cnt,m.n));const map={};Object.entries(cnt).sort((a,b)=>b[1]-a[1]).forEach(([n],i)=>map[n]='친구'+(i+1));const ks=Object.keys(map).filter(n=>n.length>=2).sort((a,b)=>b.length-a.length);src=RAW.map(m=>{let t=m.t;ks.forEach(n=>{t=t.split(n).join(map[n])});return{n:map[m.n],d:m.d,t}})}else src=RAW.map(m=>({n:m.n,d:m.d,t:m.t}));S=build(analyze(src))}
+let tt;function toast(m){let e=document.getElementById('kr-toast');if(!e){e=document.createElement('div');e.id='kr-toast';e.className='toast';document.body.appendChild(e)}e.textContent=m;e.style.display='block';clearTimeout(tt);tt=setTimeout(()=>e.style.display='none',2600)}
+const SITE=()=>location.href.split('#')[0].split('?')[0];
+async function snap(){const card=$('kr-card');const wm=document.createElement('p');wm.className='wm';wm.textContent='우리 방 분위기는? · '+SITE().replace(/^https?:\/\//,'');card.querySelector('.in').appendChild(wm);
+try{const o={pixelRatio:2,backgroundColor:PAL[S[cur].c].bg};try{await htmlToImage.toBlob(card,o)}catch(e){}return await htmlToImage.toBlob(card,o)}finally{wm.remove()}}
+function download(blob,name){const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000)}
+async function deliver(files,zipName){
+if(navigator.canShare&&navigator.canShare({files})){try{await navigator.share({files,title:'우리 방 분위기는?'});return}catch(e){if(e.name==='AbortError')return}}
+if(files.length===1)download(files[0],files[0].name);
+else{const z=new JSZip();files.forEach(f=>z.file(f.name,f));download(await z.generateAsync({type:'blob'}),zipName)}
+toast('저장했어요')}
+async function saveOne(){if(busy)return;if(!window.htmlToImage){toast('이미지 도구를 불러오지 못했어요. 새로고침 후 다시 해 주세요');return}busy=true;toast('이미지 만드는 중...');
+try{const b=await snap();await deliver([new File([b],`room-mood_${String(cur+1).padStart(2,"0")}.png`,{type:'image/png'})])}catch(e){toast('이미지 저장에 실패했어요: '+e.message)}busy=false}
+async function saveAll(){if(busy)return;if(!window.htmlToImage){toast('이미지 도구를 불러오지 못했어요. 새로고침 후 다시 해 주세요');return}busy=true;const keep=cur,files=[];
+try{for(let i=0;i<S.length;i++){cur=i;show();toast(`이미지 만드는 중... ${i+1}/${S.length}`);await new Promise(r=>setTimeout(r,60));const b=await snap();files.push(new File([b],`room-mood_${String(i+1).padStart(2,"0")}.png`,{type:'image/png'}))}
+cur=keep;show();await deliver(files,'room-mood_all.zip')}catch(e){cur=keep;show();toast('저장에 실패했어요: '+e.message)}busy=false}
+async function shareLink(){const text=`우리 단톡방 분위기 분석해봤는데 "${S.mood}"래 ㅋㅋ 너네 방도 해봐`,url=SITE();
+if(navigator.share){try{await navigator.share({title:'우리 방 분위기는?',text,url});return}catch(e){if(e.name==='AbortError')return}}
+try{await navigator.clipboard.writeText(text+' '+url);toast('공유 문구를 복사했어요. 카톡에 붙여넣어 보내세요')}catch(e){toast(url)}}
 function show(){
 const n=S.length,s=S[cur],P0=PAL[s.c];
-$('kr-view').innerHTML=`<div style="display:flex;gap:3px;margin-bottom:10px">${S.map((_,i)=>`<div style="flex:1;height:4px;border-radius:2px;background:${i<=cur?PAL[S[cur].c].acc:'var(--border)'}"></div>`).join('')}</div><div class="card" id="kr-card" style="--bg:${P0.bg};--ink:${P0.ink};--sub:${P0.sub};--acc:${P0.acc}"><div class="dot" style="width:150px;height:150px;right:-50px;top:-50px"></div><div class="dot" style="width:90px;height:90px;left:-30px;bottom:-30px"></div><div class="dot" style="width:28px;height:28px;right:24px;bottom:40px"></div><div class="in">${s.h}</div></div><div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px"><button id="kr-pv" style="background:var(--bg-neutral);color:var(--text-primary)">이전</button><span style="font-size:13px;color:var(--text-secondary)">${cur+1} / ${n}</span><button id="kr-nx" style="background:${P0.bg};color:${P0.ink}">${cur===n-1?'처음으로':'다음'}</button></div><div style="text-align:center;margin-top:10px"><button id="kr-rs" style="background:transparent;color:var(--text-secondary);font-size:13px">다른 대화 분석하기</button></div>`;
+$('kr-view').innerHTML=`<div style="display:flex;gap:3px;margin-bottom:10px">${S.map((_,i)=>`<div style="flex:1;height:4px;border-radius:2px;background:${i<=cur?PAL[S[cur].c].acc:'var(--border)'}"></div>`).join('')}</div><div class="card" id="kr-card" style="--bg:${P0.bg};--ink:${P0.ink};--sub:${P0.sub};--acc:${P0.acc}"><div class="dot" style="width:150px;height:150px;right:-50px;top:-50px"></div><div class="dot" style="width:90px;height:90px;left:-30px;bottom:-30px"></div><div class="dot" style="width:28px;height:28px;right:24px;bottom:40px"></div><div class="in">${s.h}</div></div><div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px"><button id="kr-pv" style="background:var(--bg-neutral);color:var(--text-primary)">이전</button><span style="font-size:13px;color:var(--text-secondary)">${cur+1} / ${n}</span><button id="kr-nx" style="background:${P0.bg};color:${P0.ink}">${cur===n-1?'처음으로':'다음'}</button></div><div class="share"><button id="kr-save">이 카드 저장</button><button id="kr-all">전체 카드 저장</button><button id="kr-link">친구에게 공유</button><button id="kr-anon" class="${anon?'on':''}">${anon?'이름 가림 켜짐':'이름 가리기'}</button></div><p style="font-size:12px;color:var(--text-secondary);text-align:center;margin:8px 0 0">카드에는 이름과 실제 메시지가 들어가요. 올리기 전에 이름 가리기를 켜 보세요.</p><div style="text-align:center;margin-top:10px"><button id="kr-rs" style="background:transparent;color:var(--text-secondary);font-size:13px">다른 대화 분석하기</button></div>`;
 const mv=d=>{cur=(cur+d+n)%n;show()};
 $('kr-pv').onclick=()=>{if(cur>0)mv(-1)};
 $('kr-nx').onclick=()=>mv(1);
 $('kr-card').onclick=e=>{const r=e.currentTarget.getBoundingClientRect();if(e.clientX-r.left<r.width/3){if(cur>0)mv(-1)}else mv(1)};
 $('kr-rs').onclick=home;
+$('kr-save').onclick=saveOne;$('kr-all').onclick=saveAll;$('kr-link').onclick=shareLink;
+$('kr-anon').onclick=()=>{anon=!anon;const c=cur;rebuild();cur=Math.min(c,S.length-1);show();toast(anon?'이름을 친구1, 친구2…로 바꿨어요':'이름을 원래대로 돌렸어요')};
 }
 function go(msgs){
 if(msgs.length<20){$('kr-err').textContent='메시지를 20개 이상 읽어야 분석할 수 있어요. 내보낸 파일이 맞는지 확인해 주세요.';return}
 $('kr-err').textContent='';
-S=build(analyze(msgs));cur=0;$('kr-start').style.display='none';$('kr-guide').innerHTML='';show();
+RAW=msgs.map(m=>({n:m.n,d:m.d,t:m.t}));anon=false;rebuild();cur=0;$('kr-start').style.display='none';$('kr-guide').innerHTML='';show();
 }
 function run(text){try{go(parse(text))}catch(e){$('kr-err').textContent='분석 중 오류가 났어요: '+e.message}}
 const fix=s=>{if(!s||/[^\u0000-ÿ]/.test(s))return s||'';try{return new TextDecoder('utf-8',{fatal:true}).decode(Uint8Array.from(s,c=>c.charCodeAt(0)))}catch(e){return s}};
